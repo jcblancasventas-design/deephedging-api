@@ -19,7 +19,8 @@ CORS(app)  # Permite llamadas desde cualquier origen
 # ============================================
 # CONFIGURACIÓN DE SEGURIDAD
 # ============================================
-API_KEY = "a48115e625ee1c0836f117760ebb1cc5a1de0835329d8ab432bcb0c525bf0a2f"
+import os
+API_KEY = os.environ.get("API_KEY")  # se carga desde variable de entorno
 
 def verificar_api_key():
     """Verifica que la solicitud tenga una API Key válida"""
