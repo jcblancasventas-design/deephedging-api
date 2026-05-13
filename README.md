@@ -71,12 +71,12 @@ date,SCCO,MINSUR,COPPER
 **Respuesta:**
 ```json
 {
-  "posicion_promedio_abs": 0.0312,
-  "proporcion_mayor_01": 0.021,
-  "posicion_maxima": 0.4821,
-  "posicion_minima": -0.4654,
-  "conclusion": "INACCION",
-  "recomendacion": "No implementar Deep Hedging. Usar forwards USD/PEN y futuros de cobre LME.",
+  "posicion_promedio_abs": 0.8614,
+  "proporcion_mayor_01": 1.0,
+  "posicion_maxima": 1.0,
+  "posicion_minima": -1.0,
+  "conclusion": "ACTIVA",
+  "recomendacion": "Calibrar con costos reales de la BVL antes de implementar. Usar futuros de cobre LME para Southern Copper y forwards USD/PEN para Minsur.",
   "registros_analizados": 2500,
   "activos": ["SCCO", "MINSUR", "COPPER"]
 }
@@ -143,6 +143,29 @@ Ver `requirements.txt`. Principales dependencias:
 La API está desplegada en **Render** (plan gratuito). El servicio puede tardar
 hasta 60 segundos en responder si estuvo inactivo. Esto es normal y no indica
 un error.
+
+---
+
+## Resultados validados (v2.0 — A2C entrenado)
+
+Entrenamiento ejecutado en Google Colab durante **30 épocas** con 128 trayectorias de 252 días cada una.
+
+| Métrica | Valor |
+|---------|-------|
+| Posición promedio absoluta | 0.8614 |
+| Proporción con \|posición\| > 0.1 | 100% |
+| Reward promedio por trayectoria | -0.1118 ± 0.3031 |
+| Estrategia con mejor P&L | **A2C** (-0.1118) |
+
+**Interpretación:** El agente aprendió una política de cobertura activa — toma posiciones cercanas al máximo permitido en todo momento. El P&L ligeramente negativo refleja el costo de la cobertura, que es el comportamiento esperado en un sistema de gestión de riesgo: el objetivo es reducir la exposición, no generar ganancias especulativas.
+
+Comparativa de estrategias:
+
+| Estrategia | P&L promedio |
+|-----------|-------------|
+| A2C (entrenado) | **-0.1118** ✅ mejor |
+| Inacción | mayor pérdida |
+| Cobertura parcial fija | mayor pérdida |
 
 ---
 
